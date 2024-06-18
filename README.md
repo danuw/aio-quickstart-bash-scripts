@@ -15,10 +15,22 @@ Before you can use these scripts, you will need:
 
 ## How to use
 
+Start by cloning the repo into a `aio` subdirectory
+
+```bash
+https://github.com/danuw/aio-quickstart-bash-scripts.git
+```
+
+...and then browse into its get-started directory to find the scripts to execute:
+
+```bash
+cd aio/get-started/
+```
+
 The scripts are numbered to show the sequence in which to run. Here is the sequence:
 
-1. `1-envs.sh`: This script sets and exports all the environment variables that will be needed to run the subsequent scripts. Be sure to edit this script with your own settings before running.
-2. `1-azlogin.sh`: Simply ensuring you have signed into to your Azure account using the --use-device-code before you carry on to the next steps.
+1. `0-azlogin.sh`: Simply ensuring you have signed into to your Azure account using the --use-device-code before you carry on to the next steps.
+2. `1-envs.sh`: This script sets and exports all the environment variables that will be needed to run the subsequent scripts. Be sure to edit this script with your own settings before running.
 3. `2-quickstart-deploy.sh`: Re-run steps from https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy. It also ensures you have set the permissions on your tenant member user account for access to the https://iotoperations.azure.com UI
 4. more to follow...
 ...
@@ -33,7 +45,7 @@ In the future, they will offer alternatives to cover Ubuntu cluster set up and o
 
 If you run into any issues while using these scripts, check for the following :
 
-- These scripts were tested with [v0.5.0-preview release of IoT Operations](https://github.com/Azure/azure-iot-operations/releases/tag/v0.5.0-preview) and may need some updates if you are using a different version
+- These scripts were tested with [v0.5.1-preview release of IoT Operations](https://github.com/Azure/azure-iot-operations/releases/tag/v0.5.1-preview) and may need some updates if you are using a different version
 - Ensure you have completed the prerequisites at https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy#prerequisites
 
 ## For more

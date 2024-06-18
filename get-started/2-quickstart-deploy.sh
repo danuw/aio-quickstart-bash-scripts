@@ -54,7 +54,7 @@ export userObjectId=$(az ad user show --id $USER_EMAIL --query id -o tsv)
 az role assignment create --role Contributor --assignee-object-id $userObjectId --scope /subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP
 
 echo "Initialize the IoT Operations instance"
-az iot ops init --simulate-plc --cluster $CLUSTER_NAME --resource-group $RESOURCE_GROUP --kv-id $(az keyvault show --name ${CLUSTER_NAME:0:24} -o tsv --query id)
+az iot ops init --simulate-plc --include-dp --cluster $CLUSTER_NAME --resource-group $RESOURCE_GROUP --kv-id $(az keyvault show --name ${CLUSTER_NAME:0:24} -o tsv --query id)
 
 kubectl get pods -n azure-iot-operations
 
