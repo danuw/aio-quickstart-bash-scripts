@@ -10,4 +10,6 @@ export UNIQUE_ID=your-unique-identifier-here
 #export KEYVAULT_NAME=we-aio-kv-$UNIQUE_ID
 export USER_EMAIL=<username@TENANTNAME.onmicrosoft.com> # set here - if you have not created, consider using those steps https://learn.microsoft.com/en-us/cli/azure/ad/user?view=azure-cli-latest#az-ad-user-create
 
-echo "Environment variables set to create '$CLUSTER_NAME' in '$LOCATION' under '$RESOURCE_GROUP'"
+
+echo "Environment variables set to create '$CLUSTER_NAME' in '$LOCATION' under '$RESOURCE_GROUP'."
+echo "'$USER_EMAIL' will be provided contributor access to this resource group."
