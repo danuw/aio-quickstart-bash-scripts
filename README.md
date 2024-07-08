@@ -10,7 +10,7 @@ This project provides a set of bash scripts to quickly set up and start Azure Io
 
 Before you can use these scripts, you will need:
 
-- Pre-requisites listed in https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy and in particular, having create a codespace using the [given link](https://github.com/codespaces/new/Azure-Samples/explore-iot-operations?quickstart=1)
+- Pre-requisites listed in https://learn.microsoft.com/en-us/azure/iot-operations/get-started/quickstart-deploy and in particular, having created a codespace using the [given link](https://github.com/codespaces/new/Azure-Samples/explore-iot-operations?quickstart=1)
 - Ensure you have a user created as a member of your tenant (see [`az add user create`](https://learn.microsoft.com/en-us/cli/azure/ad/user?view=azure-cli-latest#az-ad-user-create) )
 
 ## How to use
@@ -18,7 +18,7 @@ Before you can use these scripts, you will need:
 Start by cloning the repo into a `aio` subdirectory
 
 ```bash
-https://github.com/danuw/aio-quickstart-bash-scripts.git
+git clone https://github.com/danuw/aio-quickstart-bash-scripts.git aio
 ```
 
 ...and then browse into its get-started directory to find the scripts to execute:
@@ -39,7 +39,7 @@ The scripts are numbered to show the sequence in which to run. Here is the seque
 
 At first these scripts will follow the quickstart tutorial structure from the official documentation.
 
-In the future, they will offer alternatives to cover Ubuntu cluster set up and other testing environements, as well as new scenarios.
+In the future, they will offer alternatives to cover Ubuntu cluster set up and other testing environments, as well as new scenarios.
 
 ## Troubleshooting
 
