@@ -36,6 +36,11 @@ az connectedk8s enable-features -n $CLUSTER_NAME -g $RESOURCE_GROUP --custom-loc
 echo "verify host - check everything is set up correctly"
 az iot ops verify-host
 
+# Are we using the Data Processor feature? if so, at this stage we need to install this extension version
+if [ "$USE_DP" = true ]; then
+    az extension add --upgrade --name azure-iot-ops --version 0.5.1b1
+fi
+
 #az connectedk8s show -n $CLUSTER_NAME -g $RESOURCE_GROUP  --query id -o tsv
 
 echo "Current custom locations:"
@@ -54,7 +59,12 @@ export userObjectId=$(az ad user show --id $USER_EMAIL --query id -o tsv)
 az role assignment create --role Contributor --assignee-object-id $userObjectId --scope /subscriptions/$SUBSCRIPTION_ID/resourceGroups/$RESOURCE_GROUP
 
 echo "Initialize the IoT Operations instance"
-az iot ops init --simulate-plc --include-dp --cluster $CLUSTER_NAME --resource-group $RESOURCE_GROUP --kv-id $(az keyvault show --name ${CLUSTER_NAME:0:24} -o tsv --query id)
+
+if [ "$USE_DP" = true ]; then
+    az iot ops init --simulate-plc --include-dp --cluster $CLUSTER_NAME --resource-group $RESOURCE_GROUP --kv-id $(az keyvault show --name ${CLUSTER_NAME:0:24} -o tsv --query id)
+else
+    az iot ops init --simulate-plc --cluster $CLUSTER_NAME --resource-group $RESOURCE_GROUP --kv-id $(az keyvault show --name ${CLUSTER_NAME:0:24} -o tsv --query id)
+fi
 
 kubectl get pods -n azure-iot-operations
 
