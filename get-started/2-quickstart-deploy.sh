@@ -16,10 +16,9 @@ echo "install azure providers"
 az provider register -n "Microsoft.ExtendedLocation"
 az provider register -n "Microsoft.Kubernetes"
 az provider register -n "Microsoft.KubernetesConfiguration"
-az provider register -n "Microsoft.IoTOperationsOrchestrator"
-az provider register -n "Microsoft.IoTOperationsMQ"
-az provider register -n "Microsoft.IoTOperationsDataProcessor"
+az provider register -n "Microsoft.IoTOperations"
 az provider register -n "Microsoft.DeviceRegistry"
+az provider register -n "Microsoft.SecretSyncController"
 
 echo "create the resource group"
 az group create --location $LOCATION --resource-group $RESOURCE_GROUP --subscription $SUBSCRIPTION_ID
@@ -31,10 +30,17 @@ echo "extract the service principal"
 export OBJECT_ID=$(az ad sp show --id bc313c14-388c-4e7d-a58e-70017303ee3b --query id -o tsv)
 
 echo "enable custom locations"
-az connectedk8s enable-features -n $CLUSTER_NAME -g $RESOURCE_GROUP --custom-locations-oid $OBJECT_ID --features cluster-connect custom-locations
+az connectedk8s enable-features -n $CLUSTER_NAME -g $RESOURCE_GROUP --custom-locations-oid $OBJECT_ID --features cluster-connect custom-locations --subscription $SUBSCRIPTION_ID
 
-echo "verify host - check everything is set up correctly"
-az iot ops verify-host
+#echo "verify host - check everything is set up correctly"
+#az iot ops verify-host
+
+# Create a storage account and schema registry
+## Create a storage account with hierarchical namespace enabled
+az storage account create --name $STORAGE_ACCOUNT --location $LOCATION --resource-group $RESOURCE_GROUP --enable-hierarchical-namespace --subscription $SUBSCRIPTION_ID
+
+## Create a schema registry that connects to your storage account
+az iot ops schema registry create --name $SCHEMA_REGISTRY --resource-group $RESOURCE_GROUP --registry-namespace $SCHEMA_REGISTRY_NAMESPACE --sa-resource-id $(az storage account show --name $STORAGE_ACCOUNT -o tsv --query id)
 
 # Are we using the Data Processor feature? if so, at this stage we need to install this extension version
 if [ "$USE_DP" = true ]; then
@@ -60,11 +66,9 @@ az role assignment create --role Contributor --assignee-object-id $userObjectId 
 
 echo "Initialize the IoT Operations instance"
 
-if [ "$USE_DP" = true ]; then
-    az iot ops init --simulate-plc --include-dp --cluster $CLUSTER_NAME --resource-group $RESOURCE_GROUP --kv-id $(az keyvault show --name ${CLUSTER_NAME:0:24} -o tsv --query id)
-else
-    az iot ops init --simulate-plc --cluster $CLUSTER_NAME --resource-group $RESOURCE_GROUP --kv-id $(az keyvault show --name ${CLUSTER_NAME:0:24} -o tsv --query id)
-fi
+az iot ops init --cluster $CLUSTER_NAME --resource-group $RESOURCE_GROUP
+az iot ops create --cluster $CLUSTER_NAME --resource-group $RESOURCE_GROUP --name ${CLUSTER_NAME}-instance  --sr-resource-id $(az iot ops schema registry show --name $SCHEMA_REGISTRY --resource-group $RESOURCE_GROUP -o tsv --query id) --broker-frontend-replicas 1 --broker-frontend-workers 1  --broker-backend-part 1  --broker-backend-workers 1 --broker-backend-rf 2 --broker-mem-profile Low
+
 
 kubectl get pods -n azure-iot-operations
 
