@@ -12,6 +12,9 @@ export KV_NAME=we-aio-kv-$UNIQUE_ID
 export INSTANCE_NAME=we-aio-ins-$UNIQUE_ID
 export USER_EMAIL=<username@TENANTNAME.onmicrosoft.com> # set here - if you have not created, consider using those steps https://learn.microsoft.com/en-us/cli/azure/ad/user?view=azure-cli-latest#az-ad-user-create
 
+STORAGE_ACCOUNT=weaiostg$UNIQUE_ID
+SCHEMA_REGISTRY=weaioreg$UNIQUE_ID
+SCHEMA_REGISTRY_NAMESPACE=weaioregns$UNIQUE_ID
 
 # add a check that the USER EMAIL does not contain the < symbol
 if [[ $USER_EMAIL == *"<"* ]]; then
